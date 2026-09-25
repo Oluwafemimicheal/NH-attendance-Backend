@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema({
 
   center: {
     type: String, 
-    enum: ["Lekki", "Egbeda", "Head Office"],
     default: "Head Office",
     required: true
   },
