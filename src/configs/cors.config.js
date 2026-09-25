@@ -1,7 +1,7 @@
 
 const allowedOrigins = [
-  'http://localhost:3232/',   
-  'https://student-attendence-murex.vercel.app/'
+  'http://localhost:3232',
+  'https://student-attendent.vercel.app'
 ];
 
 export const corsOptions = {
