@@ -3,8 +3,8 @@ import dotenv from "dotenv"
 import path from 'path';
 import cors from "cors"
 import { fileURLToPath } from 'url';
-import connectDB from "./src/configs/db.config.js";
-import authRoute from "./src/routes/auth.route.js";
+import connectDB from "./configs/db.config.js";
+import authRoute from "./routes/auth.route.js";
 
 dotenv.config()
 
@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: '*'
+  origin: '*', optionsSuccessStatus: 200
 }));
 
 //Router
