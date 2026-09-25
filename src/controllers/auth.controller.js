@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import User from "../models/auth.model.js";
 import jwt from "jsonwebtoken"
+import { sendLoginNotification, sendSignUpNotification } from "../utili/email.controller.js";
 
 
 
@@ -17,6 +18,8 @@ export const signUp = async (req, res) => {
     const newlyUser = await User.create({ fullName, email, password: hashPassword, center });
 
     if (!newlyUser) return res.status(400).json({ success: false, message: "Sorry something went wrong creating your account, try again in 5min!" })
+
+    sendSignUpNotification(newlyUser)
 
     res.status(201).json({
       success: true, message: "Account created successfully!",
@@ -46,6 +49,7 @@ export const login = async (req, res) => {
       expiresIn: '7d',
     });
 
+    sendLoginNotification(checkingUser)
     res.status(200).json({
       token: token,
       success: true, message: "Login successfully!", token: token,

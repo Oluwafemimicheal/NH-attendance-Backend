@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0;">
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; margin-top: 50px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <tr>
+            <td style="background-color: #4A90E2; padding: 20px; text-align: center; color: #ffffff;">
+                <h1 style="margin: 0; font-size: 24px;">Security Alert</h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px; color: #333333; line-height: 1.6;">
+                <p style="font-size: 18px;">Hello <strong>{{name}}</strong>,</p>
+                <p>We detected a new login to your account from a new device or browser.</p>
+                <p style="background-color: #f9f9f9; padding: 15px; border-left: 4px solid #4A90E2; font-family: monospace;">
+                    <strong>Time:</strong> {{date}}<br>
+                    <strong>Location:</strong> {{location}}
+                </p>
+                <p>If this was you, you can safely ignore this email. If this wasn't you, please change your password immediately.</p>
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="{{actionUrl}}" style="background-color: #4A90E2; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Secure My Account</a>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color: #f4f4f4; padding: 20px; text-align: center; color: #888888; font-size: 12px;">
+                &copy; OFM Tech Insight. | All rights reserved.
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
