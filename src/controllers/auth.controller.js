@@ -16,6 +16,10 @@ export const signUp = async (req, res) => {
     const hashPassword = await argon2.hash(password)
 
     const newlyUser = await User.create({ fullName, email, password: hashPassword, center });
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+    await otpCode.findOneAndUpdate(
+      { email: email }, { otp: otpCode }, { upsert: true, returnDocument: "after" }
+    )
 
     if (!newlyUser) return res.status(400).json({ success: false, message: "Sorry something went wrong creating your account, try again in 5min!" })
 
@@ -100,4 +104,26 @@ export const getAuth = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+const verifyUser = async (req, res) => {
+  const { email, otp } = req.body
+
+  try {
+    const otpRecord = await Otp.findOne({ email: email })
+
+    if (!otpRecord) {
+      return res.status(404).json({ success: false, message: "OTP expired or not found." })
+    }
+
+    if (otpRecord.otp === otp) {
+      await User.findOneAndUpdate({ email: email }, { isVerified: true })
+      await Otp.deleteOne({ _id: otpRecord._id })
+
+      return res.status(400).json({ success: false, message: "Invalid OTP code." })
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ success: false, message: "server error during verification." })
+  }
+}
 
