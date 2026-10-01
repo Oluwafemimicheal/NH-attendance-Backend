@@ -41,28 +41,28 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const checkingUser = await User.findOne({ username })
+    const user = await User.findOne({ username })
 
-    if (!checkingUser) return res.status(400).json({ success: false, message: "Username don't exist" })
+    if (!user) return res.status(400).json({ success: false, message: "Username don't exist" })
 
-    const verifyPassword = await argon2.verify(checkingUser.password, password)
+    const verifyPassword = await argon2.verify(user.password, password)
 
     if (!verifyPassword) return res.status(400).json({ success: false, message: "Incorrect password" })
 
-    const payload = { id: checkingUser._id };
+    const payload = { id: user._id };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET, {
       expiresIn: '7d',
     });
 
-    sendLoginNotification(checkingUser)
+    sendLoginNotification(user)
     res.status(200).json({
       token: token,
       success: true, message: "Login successfully!", token: token,
       user: {
-        id: checkingUser._id,
-        username: checkingUser.username,
-        center: checkingUser.center,
+        id: user._id,
+        username: user.username,
+        center: user.center,
       },
     })
 
@@ -96,12 +96,9 @@ export const getAuth = async (req, res) => {
     if (!req.user?.id) {
       return res.status(401).json({ message: 'Not authorized' });
     }
-
-    const user = await User.findById(req.user.id).select('-password');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    res.status(200).json(user);
+    res.status(200).json(
+      req.user,
+    );
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

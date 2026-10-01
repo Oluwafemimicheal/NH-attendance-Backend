@@ -19,7 +19,7 @@ export const createStudent = async (req, res) => {
 
 export const getAllStudents = async (req, res) => {
   try {
-    const students = await Student.find({ user: req.user._id });
+    const students = await Student.find({ user: req.user._id }).lean();
     res.status(200).json({
       success: true,
       count: students.length,
