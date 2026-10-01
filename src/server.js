@@ -7,6 +7,7 @@ import connectDB from "./configs/db.config.js";
 import authRoute from "./routes/auth.route.js";
 import { corsOptions } from "./configs/cors.config.js";
 import aiRoute from "./routes/ai.route.js";
+import studentRouter from "./routes/student.route.js";
 
 dotenv.config()
 
@@ -26,6 +27,7 @@ app.use(cors(corsOptions));
 
 //Router
 app.use("/api/auth", authRoute)
+app.use("/api/student", studentRouter)
 app.use("/api/ai", aiRoute)
 
 

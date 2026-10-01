@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Student } from "./student.model";
 
 const userSchema = new mongoose.Schema({
   fullName: {
@@ -29,7 +30,7 @@ const userSchema = new mongoose.Schema({
   },
 
   center: {
-    type: String, 
+    type: String,
     default: "Head Office",
     required: true
   },
@@ -42,7 +43,13 @@ const userSchema = new mongoose.Schema({
   isVerified: {
     type: Boolean,
     default: false
-  }
+  },
+  role: {
+    type: String,
+    enum: ['student', 'instructor', 'admin'],
+    default: 'student'
+  },
+
 })
 
 userSchema.pre('save', async function () {
@@ -53,7 +60,7 @@ userSchema.pre('save', async function () {
       this.username = `${cleanName}${randomNum}`;
     }
   } catch (error) {
-    throw error; 
+    throw error;
   }
 });
 

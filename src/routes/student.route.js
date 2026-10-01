@@ -1,0 +1,16 @@
+import express from "express";
+import { createStudent, deleteStudent, getAllStudents, getStudentById, updateStudent } from "../controllers/student";
+
+
+const studentRouter = express.Router();
+
+router.route("/")
+  .post(createStudent)   
+  .get(getAllStudents);   
+
+router.route("/:id")
+  .get(getStudentById)    
+  .put(updateStudent)    
+  .delete(deleteStudent);
+
+export default studentRouter;
