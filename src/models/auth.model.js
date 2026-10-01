@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { Student } from "./student.model";
 
 const userSchema = new mongoose.Schema({
   fullName: {
@@ -37,13 +36,14 @@ const userSchema = new mongoose.Schema({
 
   image: {
     type: String,
-    default: "/images/openclipart-vectors-avatar-154375_640.png"
+    default: ""
   },
 
   isVerified: {
     type: Boolean,
     default: false
   },
+
   role: {
     type: String,
     enum: ['student', 'instructor', 'admin'],
@@ -55,9 +55,13 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function () {
   try {
     if (!this.username) {
-      const cleanName = this.fullName ? this.fullName.replace(/[^a-z0-9]/g, '') : 'user';
+      const cleanName = this.fullName ? this.fullName.slice(0, 4).replace(/[^a-z0-9]/g, '') : 'user';
       const randomNum = Math.floor(1000 + Math.random() * 9000);
       this.username = `${cleanName}${randomNum}`;
+    }
+
+    if (!this.image) {
+      this.image = `https://api.dicebear.com/7.x/avataaars/svg?seed=${this.email}`;
     }
   } catch (error) {
     throw error;

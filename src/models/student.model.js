@@ -28,7 +28,7 @@ const studentSchema = new mongoose.Schema(
       trim: true,
     },
     phoneNumber: {
-      type: String, // Changed to String to preserve leading zeros/country codes
+      type: String,
       trim: true,
     },
     image: {
@@ -45,17 +45,17 @@ const studentSchema = new mongoose.Schema(
       default: 0,
       min: [0, "Score cannot be negative"],
     },
-    verificationCode: { // Renamed for clarity
+    verificationCode: {
       type: String,
-      select: false, // Hides the code from API responses by default for security
+      select: false,
     },
-    isVerified: { // Renamed from isStudentVerify
+    isVerified: {
       type: Boolean,
       default: false,
     },
   },
   {
-    timestamps: true // Automatically adds createdAt and updatedAt fields
+    timestamps: true 
   }
 );
 
@@ -72,6 +72,10 @@ studentSchema.pre("save", function () {
     }
 
     this.verificationCode = result;
+  }
+
+  if (!this.image) {
+    this.image = `https://api.dicebear.com/7.x/avataaars/svg?seed=${this.email}`;
   }
 });
 

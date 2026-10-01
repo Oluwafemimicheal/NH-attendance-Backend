@@ -1,14 +1,14 @@
 import express from "express";
-import { createStudent, deleteStudent, getAllStudents, getStudentById, updateStudent } from "../controllers/student";
+import { createStudent, deleteStudent, getAllStudents, getStudentById, updateStudent } from "../controllers/student.js";
 
 
 const studentRouter = express.Router();
 
-router.route("/")
+studentRouter.route("/")
   .post(createStudent)   
   .get(getAllStudents);   
 
-router.route("/:id")
+studentRouter.route("/:id")
   .get(getStudentById)    
   .put(updateStudent)    
   .delete(deleteStudent);

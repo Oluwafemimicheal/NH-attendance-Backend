@@ -2,12 +2,13 @@ import argon2 from "argon2";
 import User from "../models/auth.model.js";
 import jwt from "jsonwebtoken"
 import { sendLoginNotification, sendSignUpNotification } from "../utili/email.controller.js";
+import { Otp } from "../models/otp.models.js";
 
 
 
 export const signUp = async (req, res) => {
   try {
-    const { fullName, email, password, center } = req.body;
+    const { fullName, email, password, center, role } = req.body;
 
     const existingUser = await User.findOne({ email })
 
@@ -15,19 +16,20 @@ export const signUp = async (req, res) => {
 
     const hashPassword = await argon2.hash(password)
 
-    const newlyUser = await User.create({ fullName, email, password: hashPassword, center });
     const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-    await otpCode.findOneAndUpdate(
-      { email: email }, { otp: otpCode }, { upsert: true, returnDocument: "after" }
+    await Otp.findOneAndUpdate(
+      { email: email }, { otp: otpCode }, { upsert: true, returnDocument: "after", }
     )
+    const newlyUser = await User.create({ fullName, email, password: hashPassword, center, role });
 
-    if (!newlyUser) return res.status(400).json({ success: false, message: "Sorry something went wrong creating your account, try again in 5min!" })
+    if (!newlyUser) return res.status(400).json({ success: false, message: "Sorry something went wrong creating your account, try again in 1min!" })
 
     sendSignUpNotification(newlyUser)
 
     res.status(201).json({
       success: true, message: "Account created successfully!",
-      username: newlyUser?.username
+      username: newlyUser?.username,
+      otp: otpCode
     })
   } catch (error) {
     res.status(500).json({ success: false, message: "Internal server error" })
