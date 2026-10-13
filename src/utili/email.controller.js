@@ -53,7 +53,7 @@ export const sendLoginNotification = async (user) => {
   const template = handlebars.compile(source);
 
   const data = {
-    name: user?.fullname,
+    name: user?.fullName,
     date: new Date().toLocaleString(),
     location: user?.center,
     actionUrl:"https://oluwafemim.vercel.app"
